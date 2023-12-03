@@ -200,13 +200,13 @@ function DoWork([string]$appsPath) {
 
                 $newApp = New-Object -TypeName psobject
                 Add-Member -InputObject $newApp -MemberType NoteProperty -Name "name" -Value $game.name
-                Add-Member -InputObject $newApp -MemberType NoteProperty -Name "detached" -Value @($gameLaunchCmd)
+                Add-Member -InputObject $newApp -MemberType NoteProperty -Name "cmd" -Value @($gameLaunchCmd)
                 Add-Member -InputObject $newApp -MemberType NoteProperty -Name "image-path" -Value $sunshineGameCoverPath
                 Add-Member -InputObject $newApp -MemberType NoteProperty -Name "id" -Value $id.ToString()
 
                 $json.apps = $json.apps | ForEach-Object {
-                    if ($_.detached) {
-                        $gameId = GetGameIdFromCmd($_.detached[0])
+                    if ($_.cmd) {
+                        $gameId = GetGameIdFromCmd($_.cmd)
                         if ($gameId -eq $game.id) {
                             $newApp
                         }
@@ -220,8 +220,8 @@ function DoWork([string]$appsPath) {
                 }
 
                 if (!($json.apps | Where-Object { 
-                            if ($_.detached) {
-                                $gameId = GetGameIdFromCmd($_.detached[0])
+                            if ($_.cmd) {
+                                $gameId = GetGameIdFromCmd($_.cmd)
                                 return $gameId -eq $game.id
                             }
                             else {
